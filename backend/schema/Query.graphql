@@ -1,0 +1,11 @@
+# Pontos de entrada da sua API!
+type Query {
+    login(dados: UsuarioLoginInput!): Usuario
+    usuarios: [Usuario]
+    usuario(filtro: UsuarioFiltro!): Usuario
+    perfis: [Perfil]
+    perfil(filtro: PerfilFiltro!): Perfil
+    pedidos: [Pedido]
+    pedido(filtro: PedidoFiltro!): Pedido
+    faturas: [Fatura]
+}

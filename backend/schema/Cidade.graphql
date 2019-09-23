@@ -1,0 +1,5 @@
+type Cidade {
+    id: Int
+    cidade: String!
+    estado: String!
+}

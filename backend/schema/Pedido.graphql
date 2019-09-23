@@ -1,0 +1,26 @@
+type Pedido {
+    id: Int
+    cliente_id: Int
+    fabrica_id: Int!
+    situacao: Int!
+    total: Float
+    desconto: Float
+    totalComDesconto: Float
+    cadasPor: String
+    atualPor: String
+    faturas: [Fatura]
+}
+
+input PedidoInput {
+    cliente_id: Int
+    fabrica_id: Int!
+    situacao: Int!
+    total: Float
+    desconto: Float
+    cadasPor: String
+    atualPor: String
+}
+
+input PedidoFiltro {
+    id: Int
+}

@@ -1,0 +1,8 @@
+type Fatura {
+    id: Int
+    pedido_id: Int
+    nf: String
+    valFatu: Float
+    cadasPor: String
+    atualPor: String
+}

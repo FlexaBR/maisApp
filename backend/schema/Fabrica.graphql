@@ -1,0 +1,13 @@
+enum FabricaSituacao {
+        ATIVA
+        INATIVA
+}
+
+type Fabrica {
+    id: Int
+    cidade_id: Int
+    situacao: FabricaSituacao
+    razaoSocial: String!
+    cadasPor: String
+    atualPor: String
+}

@@ -1,0 +1,10 @@
+#import Usuario, Perfil from 'Usuario.graphql'
+#import Query from 'Query.graphql'
+#import Mutation from 'Mutation.graphql'
+
+#import Cidade from 'Cidade.graphql'
+#import Cliente from 'Cliente.graphql'
+#import Fabrica from 'Fabrica.graphql'
+#import Fatura from 'Fatura.graphql'
+#import Pedido from 'Pedido.graphql'
+#import Produto from 'Produto.graphql'

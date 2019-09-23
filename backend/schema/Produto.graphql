@@ -1,0 +1,8 @@
+type Produto {
+    id: Int
+    fabrica_id: Int
+    nomeProd: String!
+    tabela1: Float!
+    cadasPor: String
+    atualPor: String
+}

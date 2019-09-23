@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - ${APP_DB_PORT}:${APP_DB_PORT}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${APP_DB_PASSWORD}
+    volumes:
+      - mysqldocker:/var/lib/mysql
+volumes:
+  mysqldocker:
