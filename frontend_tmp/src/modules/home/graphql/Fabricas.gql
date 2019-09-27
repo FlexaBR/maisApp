@@ -1,0 +1,7 @@
+#import './FabricaFragment.gql'
+
+query Fabricas {
+  fabricas {
+    ...FabricaFragment
+  }
+}

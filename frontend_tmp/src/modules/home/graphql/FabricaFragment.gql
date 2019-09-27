@@ -1,0 +1,14 @@
+#import '@/modules/auth/graphql/UserFragment.gql'
+
+fragment FabricaFragment on Fabrica {
+  id
+  situacao
+  razaoSocial
+  fantasia
+  nomeAbrev
+  email
+  telefones
+  criadoPor {
+    ...UserFragment
+  }
+}

@@ -1,0 +1,7 @@
+#import './FabricaFragment.gql'
+
+mutation FabricaCreate($razaoSocial: String!) {
+  createFabrica(razaoSocial: $razaoSocial) {
+    ...FabricaFragment
+  }
+}
