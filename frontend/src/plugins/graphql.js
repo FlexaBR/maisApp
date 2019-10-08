@@ -6,27 +6,25 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 
 
 Vue.use({
-  install(Vue) {
-    // ApolloLink
-    const httpLink = createHttpLink({
-      uri: 'http://localhost:4000/'
-    })
+    install(Vue) {
+        const httpLink = createHttpLink({
+            uri: 'http://localhost:4000/'
+        })
 
-    // ApolloLink
-    const authLink = setContext((_, { headers }) => {
-      const token = localStorage.getItem('token')
+        const authLink = setContext((_, { headers }) => {
+            const token = localStorage.getItem('token')
 
-      return {
-        headers: {
-          ...headers,
-          authorization: token ? `Bearer ${token}` : ''
-        }
-      }
-    })
+            return {
+                headers: {
+                    ...headers,
+                    authorization: token ? `Bearer ${token}` : ''
+                }
+            }
+        })
 
-    Vue.prototype.$api = new ApolloClient({
-      link: authLink.concat(httpLink),
-      cache: new InMemoryCache()
-    })
-  }
+        Vue.prototype.$api = new ApolloClient({
+            link: authLink.concat(httpLink),
+            cache: new InMemoryCache()
+        })
+    }
 })

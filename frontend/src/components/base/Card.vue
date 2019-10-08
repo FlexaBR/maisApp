@@ -1,17 +1,9 @@
-<template>
-  <v-card
-    tile
-    flat
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
-    <slot />
-  </v-card>
-</template>
-
 <script>
-export default {
-  name: 'BaseCard',
-  inheritAttrs: false
-}
+  import { VCard } from 'vuetify/lib'
+
+  export default {
+    name: 'Card',
+
+    extends: VCard
+  }
 </script>
