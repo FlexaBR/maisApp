@@ -3,7 +3,13 @@
 </template>
 
 <script>
-  export default {
-    name: 'App'
+import { mapActions } from "vuex";
+
+export default {
+  name: "App",
+  methods: mapActions(["setUsuario"]),
+  created() {
+    this.setUsuario(null);
   }
+};
 </script>

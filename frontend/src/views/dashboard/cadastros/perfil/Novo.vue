@@ -10,8 +10,6 @@
                         </div>
                         <v-text-field label="Nome"
                             v-model="perfil.nome" />
-                        <v-text-field label="Rótulo"
-                            v-model="perfil.rotulo" />
                         <v-btn color="primary" class="ml-0 mt-3"
                             @click="novoPerfil">
                             Novo Perfil
@@ -27,8 +25,6 @@
                             v-model="dados.id" />
                         <v-text-field label="Nome" readonly
                             v-model="dados.nome" />
-                        <v-text-field label="Rótulo" readonly
-                            v-model="dados.rotulo" />
                     </template>
                 </v-layout>
             </v-flex>
@@ -38,6 +34,7 @@
 
 <script>
 import Erros from '../../comum/Erros'
+import gql from 'graphql-tag'
 
 export default {
     components: { Erros },
@@ -50,7 +47,30 @@ export default {
     },
     methods: {
         novoPerfil() {
-            // implementar
+            this.$api.mutate({
+                mutation: gql`
+                    mutation (
+                        $nome: String
+                    ) {
+                        novoPerfil (
+                            dados: { 
+                                nome: $nome
+                            }
+                        ) { 
+                            id nome
+                        }
+                    }
+                `,
+                variables: {
+                    nome: this.perfil.nome
+                },
+            }).then(resultado => {
+                this.dados = resultado.data.novoPerfil
+                this.perfil = {}
+                this.erros = null
+            }).catch(e => {
+                this.erros = e
+            })
         }
     }
 }

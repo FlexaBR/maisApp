@@ -17,9 +17,6 @@
                     <v-divider class="mb-3" />
                     <v-text-field label="Nome"
                         v-model="perfil.nome" />
-                    <v-text-field label="Rótulo"
-                        v-model="perfil.rotulo" />
-
                     <v-btn color="primary" class="ml-0 mt-3"
                         @click="alterarPerfil">
                         Alterar Perfil
@@ -35,8 +32,6 @@
                             v-model="dados.id" />
                         <v-text-field label="Nome" readonly
                             v-model="dados.nome" />
-                        <v-text-field label="Rótulo" readonly
-                            v-model="dados.rotulo" />
                     </template>
                 </v-layout>
             </v-flex>
@@ -46,6 +41,7 @@
 
 <script>
 import Erros from '../../comum/Erros'
+import gql from 'graphql-tag'
 
 export default {
     components: { Erros },
@@ -59,7 +55,37 @@ export default {
     },
     methods: {
         alterarPerfil() {
-            // implementar
+            this.$api.mutate({
+                mutation: gql`mutation (
+                    $idFiltro: Int
+                    $nomeFiltro: String
+                    $nome: String
+                ) {
+                    alterarPerfil (
+                        filtro: {
+                            id: $idFiltro
+                            nome: $nomeFiltro
+                        }
+                        dados: { 
+                            nome: $nome
+                        }
+                    ) { 
+                        id nome
+                    }
+                }`,
+                variables: {
+                    idFiltro: this.filtro.id,
+                    nomeFiltro: this.filtro.nome,
+                    nome: this.perfil.nome
+                },
+            }).then(resultado => {
+                this.dados = resultado.data.alterarPerfil
+                this.filtro = {}
+                this.perfil = {}
+                this.erros = null
+            }).catch(e => {
+                this.erros = e
+            })
         }
     }
 }

@@ -1,7 +1,7 @@
 <template>
   <v-container id="register" fluid fill-height tag="section" class="cyan">
     <v-row justify="center" class="mt-12">
-      <v-col cols="9">
+      <v-col cols="12">
         <v-slide-y-transition appear>
           <v-card class="pa-3 pa-md-5 mx-auto" light>
             <pages-heading class="text-center display-3">Registro</pages-heading>
@@ -34,19 +34,39 @@
 
               <v-col cols="12" md="6">
                 <div class="text-center">
-                  <v-text-field color="secondary" label="Primeiro Nome..." prepend-icon="mdi-face" />
-
-                  <v-text-field color="secondary" label="Email..." prepend-icon="mdi-email" />
-
-                  <v-text-field color="secondary" label="Senha..." prepend-icon="mdi-lock-outline" />
+                 
 
                   <v-text-field
-                    class="mb-8"
                     color="secondary"
-                    label="Confirmação de senha..."
-                    prepend-icon="mdi-lock-outline"
+                    label="Primeiro Nome..."
+                    prepend-icon="mdi-face"
+                    v-model="usuario.nome"
                   />
-                  <pages-btn color="success">Registrar</pages-btn>
+
+                  <v-text-field
+                    color="secondary"
+                    label="Email..."
+                    prepend-icon="mdi-email"
+                    v-model="usuario.email"
+                  />
+
+                  <v-text-field
+                    color="secondary"
+                    label="Senha..."
+                    prepend-icon="mdi-lock-outline"
+                    v-model="usuario.senha"
+                    type="password"
+                  />
+
+                  <v-text-field
+                    name="confirmPassword"
+                    color="secondary"
+                    label="Confirme a senha..."
+                    prepend-icon="mdi-lock-outline"
+                    type="password"
+                  />
+
+                  <pages-btn color="success" @click="registrar">Registrar</pages-btn>
                 </div>
               </v-col>
             </v-row>
@@ -55,20 +75,26 @@
       </v-col>
     </v-row>
   </v-container>
+  
 </template>
 
 <script>
+import Erros from "../dashboard/comum/Erros"
+import gql from "graphql-tag"
+
 export default {
   name: "PagesRegister",
 
   components: {
+    Erros,
     PagesBtn: () => import("./components/Btn"),
     PagesHeading: () => import("./components/Heading")
   },
 
   data: () => ({
+    usuario: {},
+    erros: null,
     sections: [
-      
       {
         icon: "mdi-briefcase-search-outline",
         iconColor: "success",
@@ -89,8 +115,44 @@ export default {
           "Agende uma data aproximada para novos pedidos que lembramos você."
       }
     ]
-  })
-};
+  }),
+
+  methods: {
+    registrar() {
+      this.$api.mutate({
+        mutation: gql`
+          mutation (
+            $nome: String!
+            $email: String!
+            $senha: String!
+            ) {
+                registrarUsuario(
+                  dados: {
+                    nome: $nome
+                    email: $email
+                    senha: $senha
+                  }
+                ) {
+                    id nome email perfis { nome }
+                }
+              }
+        `,
+        variables: {
+          nome: this.usuario.nome,
+          email: this.usuario.email,
+          senha: this.usuario.senha
+        }
+      })
+        .then(resultado => {
+          this.usuario = {}
+          this.erros = null
+          this.$router.push(this.$route.query.redirect || '/analise')
+        }).catch(e => {
+            this.erros = e
+          })
+    }
+  }
+}
 </script>
 
 <style lang="sass">

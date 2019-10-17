@@ -9,6 +9,9 @@ module.exports = async ({ req }) => {
 
     let usuario = null
     let admin = false
+    let cliente = false
+    let diretor = false
+    let preposto = false
 
     if(token) {
         try {
@@ -54,9 +57,6 @@ module.exports = async ({ req }) => {
         },
         validarUsuarioFiltro(filtro) {
             if(admin) return
-            // libera Diretor para alterarUsuario
-            if(diretor) return
-
             if(!usuario) throw err
             if(!filtro) throw err
 

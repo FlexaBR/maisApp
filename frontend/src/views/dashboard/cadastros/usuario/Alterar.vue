@@ -25,7 +25,7 @@
                         v-model="usuario.perfis"
                         :items="perfis"
                         item-value="id"
-                        item-text="rotulo"
+                        item-text="nome"
                         attach multiple
                         chips deletable-chips />
                     <v-btn class="ml-0 mt-3"
@@ -50,7 +50,7 @@
                         <v-text-field label="E-mail" readonly
                             v-model="dados.email" />
                         <v-text-field label="Perfis" readonly
-                            :value="perfisRotulos" />
+                            :value="perfisNomes" />
                     </template>
                 </v-layout>
             </v-flex>
@@ -60,6 +60,7 @@
 
 <script>
 import Erros from '../../comum/Erros'
+import gql from 'graphql-tag'
 
 export default {
     components: { Erros },
@@ -73,9 +74,9 @@ export default {
         }
     },
     computed: {
-        perfisRotulos() {
+        perfisNomes() {
             return this.dados && this.dados.perfis &&
-                this.dados.perfis.map(p => p.rotulo).join(', ')
+                this.dados.perfis.map(p => p.nome).join(', ')
         },
         perfisSelecionados() {
             if(this.usuario.perfis) {
@@ -87,10 +88,56 @@ export default {
     },
     methods: {
         alterarUsuario() {
-            // Implementar
+            this.$api.mutate({
+                mutation: gql`mutation (
+                    $idFiltro: Int
+                    $emailFiltro: String
+                    $nome: String
+                    $email: String
+                    $senha: String
+                    $perfis: [PerfilFiltro]
+                ) {
+                    alterarUsuario (
+                        filtro: {
+                            id: $idFiltro
+                            email: $emailFiltro
+                        }
+                        dados: { 
+                            nome: $nome
+                            email: $email
+                            senha: $senha
+                            perfis: $perfis
+                        }
+                    ) { 
+                        id nome email perfis { id nome }
+                    }
+                }`,
+                variables: {
+                    idFiltro: this.filtro.id,
+                    emailFiltro: this.filtro.email,
+                    nome: this.usuario.nome,
+                    email: this.usuario.email,
+                    senha: this.usuario.senha,
+                    perfis: this.perfisSelecionados
+                },
+            }).then(resultado => {
+                this.dados = resultado.data.alterarUsuario
+                this.filtro = {}
+                this.usuario = {}
+                this.erros = null
+            }).catch(e => {
+                this.erros = e
+            })
         },
         obterPerfis() {
-            // implementar
+            this.$api.query({
+                query: gql`{ perfis { id nome } }`
+            }).then(resultado => {
+                this.perfis = resultado.data.perfis
+                this.erros = null
+            }).catch(e => {
+                this.erros = e
+            })
         }
     }
 }

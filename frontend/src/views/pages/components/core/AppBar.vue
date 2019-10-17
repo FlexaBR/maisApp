@@ -57,11 +57,6 @@
           to: '/home'
         },
         {
-          icon: 'mdi-view-dashboard',
-          text: 'Dashboard',
-          to: '/dashboard/dashboard'
-        },
-        {
           icon: 'mdi-account-multiple-plus',
           text: 'Registro',
           to: '/register'

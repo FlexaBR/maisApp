@@ -18,7 +18,6 @@
                     <template slot="items" slot-scope="props">
                         <td>{{ props.item.id }}</td>
                         <td>{{ props.item.nome }}</td>
-                        <td>{{ props.item.rotulo }}</td>
                     </template>
                 </v-data-table>
             </v-flex>
@@ -28,6 +27,7 @@
 
 <script>
 import Erros from '../../comum/Erros'
+import gql from 'graphql-tag'
 
 export default {
     components: { Erros },
@@ -37,14 +37,28 @@ export default {
             perfis: [],
             headers: [
                 { text: 'ID', value: 'id' },
-                { text: 'Nome', value: 'name' },
-                { text: 'Rótulo', value: 'rotulo' },
-            ],
+                { text: 'Nome', value: 'nome' }
+            ]
         }
     },
     methods: {
         obterPerfis() {
-            // implementar
+            this.$api.query({
+                query: gql`
+                    query {
+                        perfis { 
+                            id nome
+                        }
+                    }
+                `,
+                fetchPolicy: 'network-only'
+            }).then(resultado => {
+                this.perfis = resultado.data.perfis
+                this.erros = null
+            }).catch(e => {
+                this.perfis = []
+                this.erros = e
+            })
         }
     }
 }

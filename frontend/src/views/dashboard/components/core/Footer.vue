@@ -33,7 +33,7 @@
             <v-icon size="18">
               mdi-heart
             </v-icon>
-            by <a href="https://www.creative-tim.com">Creative Tim</a> for a better web.
+            by <a href="https://www.google.com">Flexa</a> for a better web.
           </div>
         </v-col>
       </v-row>
@@ -49,19 +49,7 @@
       links: [
         {
           href: '#',
-          text: 'Creative Tim'
-        },
-        {
-          href: '#',
-          text: 'About Us'
-        },
-        {
-          href: '#',
-          text: 'Blog'
-        },
-        {
-          href: '#',
-          text: 'Licenses'
+          text: 'Link?'
         }
       ]
     })

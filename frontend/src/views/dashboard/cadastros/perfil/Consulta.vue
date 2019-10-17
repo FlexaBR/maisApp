@@ -27,8 +27,6 @@
                             v-model="dados.id" />
                         <v-text-field label="Nome" readonly
                             v-model="dados.nome" />
-                        <v-text-field label="Rótulo" readonly
-                            v-model="dados.rotulo" />
                     </template>
                 </v-layout>
             </v-flex>
@@ -38,6 +36,7 @@
 
 <script>
 import Erros from '../../comum/Erros'
+import gql from 'graphql-tag'
 
 export default {
     components: { Erros },
@@ -49,15 +48,34 @@ export default {
             erros: null
         }
     },
-    computed: {
-        perfisRotulos() {
-            return this.dados && this.dados.perfis &&
-                this.dados.perfis.map(p => p.rotulo).join(', ')
-        }
-    },
     methods: {
         consultar() {
-            // implementar
+            this.$api.query({
+                query: gql`
+                    query(
+                        $id: Int
+                        $nome: String
+                ) {
+                    perfil (
+                        filtro: {
+                            id: $id
+                            nome: $nome }
+                    ) {
+                        id nome
+                    }
+                }`,
+                variables: {
+                    id: this.perfil.id,
+                    nome: this.perfil.nome
+                 },
+                 fetchPolicy: "network-only"
+            }).then(resultado => {
+                this.dados = resultado.data.perfil
+                this.perfil = {}
+                this.erros = null
+            }).catch(e => {
+                this.erros = e
+            })
         }
     }
 }
